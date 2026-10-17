@@ -1,3 +1,4 @@
+import  { useState } from "react";
 import Card from "./Card";
 const people = [
   {
@@ -31,7 +32,15 @@ const people = [
 const App = () => {   
   const onlineCount = people.filter((person) => person.isOnline).length;
   console.log("Online Count:", onlineCount);
+  const [following, setFollowing] = useState([]);   // follow kora manusher id er list
 
+const toggleFollow = (id) => {
+    if (following.includes(id)) {
+      setFollowing(following.filter((followedId) => followedId !== id));
+    } else {
+      setFollowing([...following, id]);
+    }
+}
   return (
     <div>
       <h1 className="text-4xl text-center  bg-blue-500 text-white p-4">
@@ -46,17 +55,21 @@ const App = () => {
           {onlineCount} {onlineCount === 1 ? "person is" : "people are"} online
         </p>
       )}
-      {people.map((person) => (
-        <Card
-          key={person.id}
-          name={person.name}
-          image={person.image}
-          role={person.role}
-          isOnline={person.isOnline}
-          courses={person.courses}
-        />
-      ))}
-    </div>
+      <div className="flex flex-wrap justify-center">
+        {people.map((person) => (
+          <Card
+            key={person.id}
+            name={person.name}
+            image={person.image}
+            role={person.role}
+            isOnline={person.isOnline}
+            courses={person.courses}
+            isFollowing={following.includes(person.id)}
+            onToggoleFollow={()=>toggleFollow(following)}
+          />
+        ))}</div>
+      </div>
+  
   );
 };
 
